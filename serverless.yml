@@ -1,0 +1,22 @@
+org: ramoscmichael
+app: aws-serverless-express-blog-api
+service: aws-serverless-express-blog-api
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+functions:
+  blogApi:
+    handler: dist/src/main.handler
+    package:
+      include:
+        - 'dist/**/*'
+        - '!dist/**/*.map'
+        - '!node_modules/aws-sdk/**/*'
+    events:
+      - httpApi: '*'
+
+plugins:
+   - serverless-offline
