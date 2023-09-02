@@ -9,17 +9,6 @@ const userSvc = new services_1.UserService(dao);
 const router = (0, express_1.Router)();
 const privateRoute = (0, express_1.Router)();
 router.use(privateRoute);
-/**
-   * @openapi
-   * /isAlive:
-   *  get:
-   *     tags:
-   *     - Healthcheck
-   *     description: Responds if the app is up and running
-   *     responses:
-   *       200:
-   *         description: App is up and running
-   */
 router.post("/signin", (req, res) => {
     const login = req.body;
     const data = userSvc.generateAccessToken(login);

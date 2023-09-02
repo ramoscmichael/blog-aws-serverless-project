@@ -1,0 +1,350 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "3.0.0",
+        "title": "Blog API",
+        "description": "Api that allows to create user and perform simple CRUD for a blog"
+    },
+    "basePath": "/api",
+    "schemes": [
+        "https",
+        "http"
+    ],
+    "tags": [
+        {
+            "name": "users",
+            "description": "Operations related to users"
+        },
+        {
+            "name": "blogs",
+            "description": "Operations related to blogs"
+        }
+    ],
+    "paths": {
+        "/users/signup": {
+            "post": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Register new user",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "signup",
+                        "in": "body",
+                        "description": "Signup user info",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UserSignup"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User info",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/signin": {
+            "post": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Generate user token",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "login",
+                        "in": "body",
+                        "description": "User login info",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UserLoginInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Generate user token",
+                        "schema": {
+                            "$ref": "#/definitions/UserToken"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/me": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get the current user",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token from signin",
+                        "required": true,
+                        "type": "string",
+                        "value": "Bearer <TOKEN_HERE>"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get the current user",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/blogs/{id}": {
+            "get": {
+                "tags": [
+                    "blogs"
+                ],
+                "summary": "Retreive a blog post by id",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token from signin",
+                        "required": true,
+                        "type": "string",
+                        "value": "Bearer <TOKEN_HERE>"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get blog by id",
+                        "schema": {
+                            "schema": "object",
+                            "$ref": "#/definitions/Blog"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "blogs"
+                ],
+                "summary": "Update a blog post by id",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token from signin",
+                        "required": true,
+                        "type": "string",
+                        "value": "Bearer <TOKEN_HERE>"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "name": "blog",
+                        "in": "body",
+                        "description": "Blog update info",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/BlogUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Blog info",
+                        "schema": {
+                            "schema": "object",
+                            "$ref": "#/definitions/Blog"
+                        }
+                    }
+                }
+            }
+        },
+        "/blogs": {
+            "get": {
+                "tags": [
+                    "blogs"
+                ],
+                "summary": "Retreive a blog post",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token from signin",
+                        "required": true,
+                        "type": "string",
+                        "value": "Bearer <TOKEN_HERE>"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get blog posts",
+                        "schema": {
+                            "schema": "array",
+                            "$ref": "#/definitions/Blog"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "blogs"
+                ],
+                "summary": "Create a new blog post",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token from signin",
+                        "required": true,
+                        "type": "string",
+                        "value": "Bearer <TOKEN_HERE>"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get the current user",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "UserLoginInfo": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "UserSignup": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "User": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "UserUpdate": {
+            "type": "object",
+            "properties": {
+                "first_name": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "UserToken": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "Blog": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "created_dt": {
+                    "type": "date"
+                },
+                "updated_dt": {
+                    "type": "date"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "BlogUpdate": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

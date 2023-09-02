@@ -37,7 +37,10 @@ export class UserService {
         return this.db.transaction(async (conn) => {
             const existingUser = await this.userDao.getUserById(conn, user.id); 
             objectNotNull(existingUser, 'User not exists.');
-            await this.userDao.updateUser(conn, user);
+            await this.userDao.updateUser(conn, {
+                ... existingUser,
+                ... user,
+            });
             return this.userDao.getUserById(conn, user.id)
         });
     }

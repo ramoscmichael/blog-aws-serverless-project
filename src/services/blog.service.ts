@@ -47,7 +47,10 @@ export class BlogService {
         });
     }
 
-    async getBlogPosts(offset: number = 0, limit: number = 25, user_id: number): Promise<Post[]> {
+    async getBlogPosts(offset: number = 0, limit: number = 25, user_id: number): Promise<{
+        total: number,
+        results: Post[],
+    }> {
         return this.db.transaction(async (conn) => this.blogDao.getBlogPosts(conn, offset, limit, user_id));
         
     }

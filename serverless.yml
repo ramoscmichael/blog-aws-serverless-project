@@ -8,15 +8,20 @@ provider:
   runtime: nodejs18.x
 
 functions:
-  blogApi:
-    handler: dist/src/main.handler
-    package:
-      include:
-        - 'dist/**/*'
-        - '!dist/**/*.map'
-        - '!node_modules/aws-sdk/**/*'
-    events:
-      - httpApi: '*'
+  api:
+      handler: dist/src/main.handler
+      package:
+        include:
+          - 'dist/**/*'
+          - '!dist/**/*.map'
+          - '!node_modules/aws-sdk/**/*'
+      events:
+        - httpApi: "*"
+      environment:
+        DB_HOST: 
+        DB_PORT: 
+        DB_USERNAME: 
+        DB_PASSWORD: 
 
 plugins:
    - serverless-offline

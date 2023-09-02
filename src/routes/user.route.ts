@@ -7,24 +7,24 @@ import { LoginInfo, User } from "../model";
 const dao = new DB();
 const userSvc = new UserService(dao);
 const router: Router = Router();
+
 const privateRoute: Router = Router();
+const publicRoute: Router = Router();
 
-router.use(privateRoute);
+privateRoute.use(securedRoute());
 
-router.post("/signin", (req, res) => {
+publicRoute.post("/signin", (req, res) => {
     const login:LoginInfo = req.body;
     const data = userSvc.generateAccessToken(login);
     return sendResponseJson(data.then(token => ({ token })), res);
 });
 
-router.post("/signup", (req, res) => {
+publicRoute.post("/signup", (req, res) => {
     const user = req.body;
     const data = userSvc.createUser(user)
     return sendResponseJson(data, res);
 });
 
-
-privateRoute.use("/me", securedRoute());
 privateRoute.get("/", (req: any, res) => {
     const auth = req.auth;
     const data = userSvc.getUserById(auth.id);
@@ -42,5 +42,7 @@ privateRoute.post("/", (req: any, res) => {
     return sendResponseJson(data, res);
 });
 
+router.use("/me", privateRoute);
+router.use("/", publicRoute);
 
 export default router;
